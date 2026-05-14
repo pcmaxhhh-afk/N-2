@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@1,400&family=Parisienne&display=swap" rel="stylesheet">
+    <title>Un Regalo Para Ti</title>
+    <style>
+        :root {
+            --color-fondo-1: #e0c3fc;
+            --color-fondo-2: #8ec5fc;
+            --color-sobre: #fbe2e7;
+            --color-solapa: #eeb7c2;
+            --color-carta: #ffffff;
+            --color-texto: #d81b60;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--color-fondo-1) 0%, var(--color-fondo-2) 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Lora', serif;
+            touch-action: none;
+        }
+
+        /* Contenedor de la Escena */
+        .escena {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            perspective: 1000px;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.5s ease;
+        }
+
+        /* Estructura del Sobre */
+        .sobre {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-sobre);
+            border-radius: 0 0 8px 8px;
+            z-index: 2;
+        }
+
+        /* Solapa Superior */
+        .solapa {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 120px solid var(--color-solapa);
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 4;
+        }
+
+        /* La Carta (Ajustada para incluir foto) */
+        .carta {
+            position: absolute;
+            opacity: 0;
+            transition: transform 0.8s ease-in-out, opacity 0.3s;
+            top: 10px;
+            left: 10px;
+            width: 300px;
+            height: 400px; /* Más larga para que se vea bien la foto */
+            background-color: var(--color-carta);
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            transition: transform 0.8s ease-in-out, z-index 0.1s 0.4s;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .foto-marco {
+            width: 100%;
+            height: 180px;
+            background-color: #eee;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .foto-marco img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carta h1 {
+            font-family: 'Great Vibes', cursive;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            margin: 0 0 10px 0;
+        }
+
+        .carta p {
+            font-size: 0.85rem;
+            color: #444;
+            margin: 0;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        /* ESTADO ABIERTO */
+        .escena.abierta .solapa {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .escena.abierta .carta {
+         opacity: 1;
+         transform: translateY(-220px);
+         z-index: 5; /* Solo aquí sube al frente de todo */
+        }
+
+        .escena.abierta {
+            transform: translateY(150px);
+        }
+
+        /* Corazones Flotantes */
+        #corazones {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+        .corazon {
+            position: absolute;
+            font-size: var(--size);
+            opacity: 0;
+            animation: flotar var(--dur) linear forwards;
+        }
+        @keyframes flotar {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        #instruccion {
+            position: absolute;
+            bottom: 30px;
+            color: white;
+            font-family: 'Parisienne', cursive;
+            font-size: 1.2rem;
+            z-index: 100;
+            background: rgba(0,0,0,0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="corazones"></div>
+    <div id="instruccion">Toca para abrir</div>
+
+    <div class="escena" id="envelope-escena">
+        <div class="solapa"></div>
+        <div class="carta">
+            <div class="foto-marco">
+                <!-- REEMPLAZA ESTE URL POR TU FOTO -->
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop" alt="Nuestra Foto">
+            </div>
+            <h1>Para ti</h1>
+            <p>"En cada detalle, en cada risa y en cada momento, siempre estás tú."</p>
+            <div style="margin-top:10px">❤️</div>
+        </div>
+        <div class="sobre"></div>
+    </div>
+
+    <!-- TEMA MUSICAL (OPCIONAL) -->
+    <!-- Descomenta la línea de abajo y pon el link de un audio si quieres música -->
+    <audio id="musica" src="https://www.image2url.com/r2/default/audio/1778787176737-08ebbdb6-c156-4fbb-8b90-270b7814a387.mp3" loop></audio>
+
+    <script>
+        const escena = document.getElementById('envelope-escena');
+        const instruccion = document.getElementById('instruccion');
+        const musica = document.getElementById('musica');
+        let abierta = false;
+
+        escena.onclick = () => {
+            if (!abierta) {
+                escena.classList.add('abierta');
+                instruccion.style.opacity = '0';
+                if(musica) musica.play();
+                abierta = true;
+            } else {
+                escena.classList.remove('abierta');
+                instruccion.style.opacity = '1';
+                abierta = false;
+            }
+        };
+
+        function createHeart() {
+            const container = document.getElementById('corazones');
+            const heart = document.createElement('div');
+            heart.className = 'corazon';
+            heart.innerHTML = '❤️';
+            const dur = Math.random() * 3 + 4;
+            const size = Math.random() * 15 + 10;
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.setProperty('--dur', `${dur}s`);
+            heart.style.setProperty('--size', `${size}px`);
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), dur * 1000);
+        }
+        setInterval(createHeart, 400);
+    </script>
+</body>
+</html>
